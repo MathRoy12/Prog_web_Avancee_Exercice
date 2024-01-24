@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using CookiesMVC.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CookiesMVC.Data;
@@ -9,4 +10,5 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
+    
 }

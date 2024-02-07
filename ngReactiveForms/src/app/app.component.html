@@ -1,0 +1,23 @@
+<form [formGroup]="form">
+  <mat-form-field style="width: 100%">
+    <label for="favAnimal">Ton animal préféré steu-plait dude</label>
+    <input matInput formControlName="favAnimal" type="text" name="favAnimal" id="favAnimal">
+    <mat-error *ngIf="form.get('favAnimal')?.hasError('required')">
+      Votre animal préféré est <strong>requis</strong>
+    </mat-error>
+    <mat-error *ngIf="form.get('favAnimal')?.hasError('favAnimal')">
+      Votre animal préféré doit être <strong>chat</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field style="width: 100%">
+    <label for="favEstChat">Yo avoue tu préfère les chats a l'info</label>
+    <input matInput formControlName="favEstChat" type="text" name="favEstChat" id="favEstChat">
+    <mat-error *ngIf="form.get('favEstChat')?.hasError('required')">
+      Votre réponse est <strong>requis</strong>
+    </mat-error>
+    <mat-error *ngIf="form.get('favEstChat')?.hasError('favEstChat')">
+      Votre réponse doit être <strong>oui</strong>
+    </mat-error>
+  </mat-form-field>
+  <button type="submit" [disabled]="!form.valid">Envoyer</button>
+</form>

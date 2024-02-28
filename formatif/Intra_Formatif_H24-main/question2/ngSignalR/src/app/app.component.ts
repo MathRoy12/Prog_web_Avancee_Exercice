@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import * as signalR from "@microsoft/signalr"
 
 @Component({
@@ -6,7 +6,7 @@ import * as signalR from "@microsoft/signalr"
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Pizza Hub';
 
   private hubConnection?: signalR.HubConnection;
@@ -19,7 +19,7 @@ export class AppComponent {
   money: number = 0;
   nbPizzas: number = 0;
 
-  constructor(){
+  ngOnInit() {
     this.connect();
   }
 
@@ -29,20 +29,39 @@ export class AppComponent {
       .build();
 
     // TODO: Mettre isConnected à true seulement une fois que la connection au Hub est faite
+    this.hubConnection.start().then(() => {
+      this.hubConnection?.on('UpdateNbPizzasAndMoney', (nbPizzas: number, money: number) => {
+        this.money = money;
+        this.nbPizzas = nbPizzas;
+      })
+      this.hubConnection?.on('UpdateNbUsers',(nbUsers: number)=>{
+        this.nbUsers = nbUsers;
+      })
+      this.hubConnection?.on('UpdateMoney', (money:number)=>{
+        this.money = money;
+      })
+      this.hubConnection?.on('UpdatePizzaPrice', (pizzaPrice: number) =>{
+        this.pizzaPrice = pizzaPrice;
+      })
+    })
     this.isConnected = true;
   }
 
-  selectChoice(selectedChoice:number) {
+  selectChoice(selectedChoice: number) {
     this.selectedChoice = selectedChoice;
+    this.hubConnection?.invoke("SelectChoice", selectedChoice)
   }
 
   unselectChoice() {
+    this.hubConnection?.invoke("UnselectChoice", this.selectedChoice)
     this.selectedChoice = -1;
   }
 
   addMoney() {
+    this.hubConnection?.invoke("AddMoney", this.selectedChoice)
   }
 
   buyPizza() {
+    this.hubConnection?.invoke("BuyPizza", this.selectedChoice)
   }
 }
